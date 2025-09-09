@@ -1131,6 +1131,528 @@ Horizontal Scaling = অনেকগুলো server add করা (scalable, co
 
 
 
+Redundancy আর Replication এর মধ্যে পার্থক্য
+
+
+ Redundancy (রিডান্ডেন্সি)
+English:
+ Redundancy means having extra (backup) components in a system so that if one fails, another can take over. It is about fault tolerance and ensuring system availability.
+Bangla:
+ Redundancy মানে হলো সিস্টেমে অতিরিক্ত (backup) জিনিস রাখা, যাতে একটি নষ্ট হলেও অন্যটি কাজ চালিয়ে নিতে পারে। এর মূল উদ্দেশ্য হলো system downtime কমানো।
+✅ Example (Redundancy):
+একটি সার্ভারে দুইটা পাওয়ার সাপ্লাই দেওয়া আছে। যদি একটি নষ্ট হয়, অন্যটি সাথে সাথে কাজ শুরু করবে।
+
+
+Airline এ multiple engines থাকে। যদি একটা engine fail করে, plane অন্যটা দিয়ে উড়তে পারে।
+
+
+
+🔹 Replication (রেপ্লিকেশন)
+English:
+ Replication means copying the same data/system to multiple locations so that it is available in more than one place. It is mainly for data availability, performance, and reliability.
+Bangla:
+ Replication মানে হলো একই ডেটা বা সিস্টেমকে একাধিক জায়গায় কপি করে রাখা, যাতে ডেটা সবসময় পাওয়া যায় এবং দ্রুত access করা যায়। এর উদ্দেশ্য হলো data reliability + performance improvement।
+✅ Example (Replication):
+Facebook এর data অনেক data center-এ copy করা থাকে। Dhaka server down হলেও Singapore server থেকে data পাওয়া যাবে।
+
+
+A database uses master-slave replication: master database write কাজ করে, আর slave database read কাজ করে।
+
+
+
+🔹 Key Differences (মূল পার্থক্য)
+Aspect
+Redundancy
+Replication
+Definition
+Extra (backup) components to prevent system failure
+Copying the same data/system to multiple locations
+Purpose
+Fault tolerance, high availability
+Data reliability, load balancing, performance
+Focus
+Hardware/Infrastructure backup
+Data/Information duplication
+Example
+Dual power supply in servers
+Same database available in multiple servers
+Failure Handling
+Prevents total system crash
+Ensures data is not lost and available everywhere
+
+
+🔹 Notes (মনে রাখার মতো পয়েন্ট)
+Redundancy = Backup Hardware/Component
+
+
+Replication = Copy of Data/System
+
+
+Redundancy focuses more on system availability,
+
+
+Replication focuses more on data availability & performance.
+
+
+অনেক সময় system-এ দুটো একসাথে ব্যবহার হয় (e.g., Cloud services → both redundancy + replication)।
+
+👉 সহজ করে বললে:
+Redundancy = একটা fail করলে backup আছে
+
+
+Replication = একই data/system অনেক জায়গায় copy আছে
+        Load Balancer, এর কাজ, আর Load Balancing Algorithms
+
+ What is Load Balancer?
+English:
+ A Load Balancer is a device or software that distributes incoming network traffic across multiple servers. Its goal is to ensure no single server gets overloaded, so the system stays fast, reliable, and available.
+Bangla:
+ Load Balancer হলো এমন একটি সিস্টেম (hardware বা software), যেটা incoming traffic (অনুরোধ) গুলোকে একাধিক server-এর মধ্যে ভাগ করে দেয়। এর ফলে কোনো এক সার্ভার বেশি চাপ (load) পায় না, আর পুরো সিস্টেম smooth ভাবে চলে।
+
+🔹 How Load Balancer Works
+English:
+A user makes a request (e.g., visiting a website).
+
+
+The request first goes to the Load Balancer.
+
+
+The Load Balancer decides which server should handle the request using a specific algorithm.
+
+
+The server processes the request and sends the response back through the Load Balancer.
+
+
+Bangla:
+User কোনো request করলে (যেমন: ওয়েবসাইটে ঢুকলো)।
+
+
+Request প্রথমে Load Balancer-এর কাছে যায়।
+
+
+Load Balancer নির্দিষ্ট algorithm দিয়ে ঠিক করে কোন server এই কাজ করবে।
+
+
+Server কাজ শেষ করে আবার Load Balancer এর মাধ্যমে response পাঠায়।
+
+
+✅ Example:
+ ধরা যাক তোমার একটা e-commerce সাইট আছে যেখানে ৪টা server আছে। একসাথে ১০,০০০ জন ঢুকলো। Load Balancer সেই traffic কে ৪টা server-এ ভাগ করে দিবে, যাতে কোনো server বেশি চাপ না পায়।
+
+Load Balancer = Server traffic police
+
+
+Algorithms = Rule কিভাবে request ভাগ হবে।
+
+
+
+
+
+                             Load Balancing Algorithms
+
+1️⃣ Round Robin
+English:
+ Distributes requests one by one in order across all servers. After the last server, it starts again from the first.
+ Bangla:
+ Round Robin হলো সার্ভারের মধ্যে request একের পর এক ভাগ করা। শেষ সার্ভারে গেলে আবার প্রথম সার্ভার থেকে শুরু হয়।
+Example:
+3টি server: S1, S2, S3
+
+
+Requests: R1, R2, R3, R4, R5
+
+
+Distribution:
+
+
+R1 → S1
+
+
+R2 → S2
+
+
+R3 → S3
+
+
+R4 → S1
+
+
+R5 → S2
+
+
+Use Case:
+Servers একই ধরনের এবং capacity প্রায় সমান।
+
+
+
+2️⃣ Least Connections
+English:
+ Sends request to the server with the fewest active connections. Useful for servers with different response times.
+ Bangla:
+ যে সার্ভারে সবচেয়ে কম active connection আছে, নতুন request সেখানে যায়।
+Example:
+2টি server: S1 (5 active), S2 (2 active)
+
+
+New request → S2
+
+
+Next request → whichever has fewer active connections
+
+
+Use Case:
+Servers capacity বা load ভিন্ন হলে।
+
+
+
+3️⃣ Weighted Round Robin
+English:
+ Each server is assigned a weight based on its capacity. Servers with higher weight get more requests.
+ Bangla:
+ প্রতিটি সার্ভারের একটি weight থাকে। capacity বেশি হলে বেশি request পাবে।
+Example:
+S1 weight = 3, S2 weight = 1
+
+
+Requests: 4 requests
+
+
+Distribution: S1, S1, S1, S2
+
+
+Use Case:
+Servers heterogeneous (ভিন্ন ক্ষমতার) হলে।
+
+
+
+4️⃣ IP Hash
+English:
+ Assigns requests based on client IP address. The same client always goes to the same server.
+ Bangla:
+ Client এর IP অনুযায়ী request সার্ভারে যায়। একই client সবসময় একই সার্ভারে যাবে।
+Example:
+Client IP: 192.168.1.10 → Hash → S2
+
+
+Client IP: 192.168.1.20 → Hash → S1
+
+
+Use Case:
+Session persistence প্রয়োজন হলে (যেমন online shopping)।
+
+
+
+5️⃣ Least Response Time
+English:
+ Sends request to the server with fastest response time and lowest active connections.
+ Bangla:
+ যে সার্ভারের response time দ্রুত এবং active connections কম, সেখানে request পাঠানো হয়।
+Example:
+S1 response time = 50ms, 5 active
+
+
+S2 response time = 30ms, 10 active
+
+
+New request → S1 (even though S2 has faster CPU, active connections বেশি)
+
+
+Use Case:
+Real-time applications, like video streaming or live games।
+
+
+
+6️⃣ Random
+English:
+ Sends requests to servers randomly, without following any rule.
+ Bangla:
+ Random ভাবে সার্ভারের মধ্যে request পাঠানো হয়।
+Example:
+Servers: S1, S2, S3
+
+
+Requests: R1 → S2, R2 → S1, R3 → S3 (randomly)
+
+
+Use Case:
+Simple, small-scale systems।
+
+
+
+🔹 Key Notes
+Round Robin → simple, same capacity servers।
+
+
+Least Connections → dynamic load, servers may have different speed।
+
+
+Weighted RR → heterogeneous servers।
+
+
+IP Hash → session persistence।
+
+
+Least Response Time → performance-critical applications।
+
+
+Random → simple, no state tracking।
+
+
+
+💡 সহজে মনে রাখার ট্রিক:
+Round Robin = orderly distribution
+
+
+Least Connections = lightest server first
+
+
+Weighted RR = strong server gets more
+
+
+IP Hash = same client same server
+
+
+Least Response Time = fastest available server
+
+
+Random = luck based 😊
+
+
+Caching:
+
+English:
+ Caching is the process of storing frequently accessed data temporarily so that future requests can be served faster.
+The cache can be in memory, disk, or browser.
+
+
+Main goal: Improve performance and reduce latency.
+
+
+Bangla:
+ Caching হলো এমন একটি পদ্ধতি যেখানে প্রায়ই ব্যবহৃত তথ্য সাময়িকভাবে সংরক্ষণ করা হয়, যাতে পরবর্তীতে সেই তথ্য দ্রুত পাওয়া যায়।
+Cache হতে পারে RAM, Disk বা Browser।
+
+
+মূল উদ্দেশ্য: Speed বাড়ানো এবং delay কমানো।
+
+
+
+🔹 How Caching Works
+User requests data.
+
+
+System checks if data is in cache.
+
+
+If yes → fetch from cache (fast)
+
+
+If no → fetch from main source, then store in cache for next time
+
+
+Bangla:
+User কোনো data চাইলো।
+
+
+System দেখে data cache-এ আছে কিনা
+
+
+আছে → cache থেকে পাঠানো (দ্রুত)
+
+
+নেই → main source থেকে নিয়ে আসে, পরের বার cache-এ রাখা হয়
+
+
+
+🔹 Types of Cache
+Type
+English Explanation
+Bangla Explanation
+Example
+Browser Cache
+Stores web page data locally in browser
+ব্রাউজারে ওয়েব পেজ সংরক্ষণ
+You visit YouTube → next time faster load
+Memory Cache (RAM)
+Stores data in server memory for quick access
+সার্ভারের RAM-এ data রাখা
+Redis, Memcached
+Disk Cache
+Stores data on hard disk
+হার্ড ডিস্কে সংরক্ষণ
+Browser cache images, OS page cache
+Database Cache
+Frequently accessed DB queries are cached
+DB query ফলাফল cache করা
+SELECT query result cached in Redis
+
+
+🔹🔹 Cache Eviction Techniques
+English:
+ Cache eviction is the process of removing old or unnecessary data from the cache when it is full so that new data can be stored.
+Bangla:
+ Cache eviction মানে হলো cache পূর্ণ হলে পুরনো বা অপ্রয়োজনীয় data সরানো, যাতে নতুন data cache-এ রাখা যায়।
+
+1️⃣ LRU (Least Recently Used)
+English:
+ Removes the data that has not been used for the longest time.
+Bangla:
+ যে data সবচেয়ে দীর্ঘ সময় ব্যবহার হয়নি, সেটিকে cache থেকে সরানো হয়।
+Example:
+Cache size = 3, current cache = [A, B, C]
+
+
+Access order: A → B → C → A → D
+
+
+Evict → B (least recently used), cache becomes [C, A, D]
+
+
+Use Case:
+Web browser cache, CPU cache
+
+
+
+2️⃣ FIFO (First In First Out)
+English:
+ Removes the oldest data in the cache, i.e., the one that came first.
+Bangla:
+ যে data cache-এ প্রথমে এসেছে, সেটি প্রথম সরানো হয়।
+Example:
+Cache size = 3, current cache = [A, B, C]
+
+
+New data D → Evict A (first in), cache becomes [B, C, D]
+
+
+Use Case:
+Simple caching scenarios, queue-based systems
+
+
+
+3️⃣ LFU (Least Frequently Used)
+English:
+ Removes the data that has been used least frequently.
+Bangla:
+ যে data কমবার ব্যবহৃত হয়েছে, সেটি cache থেকে সরানো হয়।
+Example:
+Cache = [A(5), B(2), C(3)] → numbers = usage frequency
+
+
+New data D → Evict B (least frequency 2), cache = [A, C, D]
+
+
+Use Case:
+Applications where frequency matters, e.g., recommendation systems
+
+
+
+4️⃣ Random Replacement
+English:
+ Removes a randomly chosen data item from the cache.
+Bangla:
+ Cache থেকে যেকোনো random data সরানো হয়।
+Example:
+Cache = [A, B, C] → New data D
+
+
+Evict B randomly → cache = [A, C, D]
+
+
+Use Case:
+Simple or memory-constrained systems
+
+
+
+5️⃣ Time-based Eviction (TTL – Time To Live)
+English:
+ Data is removed from cache after a fixed time period.
+Bangla:
+ Cache-এ থাকা data নির্দিষ্ট সময় পরে সরানো হয়।
+Example:
+Cache TTL = 5 mins
+
+
+Data X added at 10:00 → automatically evicted at 10:05
+
+
+Use Case:
+Session caches, web content caching
+
+
+
+🔹 Notes
+Eviction needed because cache size is limited
+
+
+Choice of technique depends on:
+
+
+Access patterns (recent vs frequent)
+
+
+Performance requirements
+
+
+Memory constraints
+
+
+Often LRU + TTL combination is used in real-world systems
+
+
+
+💡 সহজে মনে রাখার উপায়:
+LRU = Oldest unused
+
+
+FIFO = First come, first out
+
+
+LFU = Rarely used removed
+
+
+Random = Lucky evict
+
+
+TTL = Expire after time
+
+
+🔹 Example
+You visit a website → website images, HTML, JS files load → stored in browser cache
+
+
+Next time you visit → page loads much faster because it fetches from cache, not server
+
+
+Database example:
+
+
+Query: SELECT * FROM users WHERE id=1
+- First time → fetch from DB (slow)
+- Next time → fetch from Redis cache (fast)
+
+
+🔹 Notes
+Cache = Speed Booster
+
+
+Trade-off: Stale Data Risk → sometimes cached data is outdated
+
+
+Often used in: Web apps, API calls, databases, OS, CPU
+
+
+
+💡 সহজে মনে রাখার উপায়:
+ Cache = Short-term storage for faster access
+
+
+
+
+
+
+
+
 
 
 
